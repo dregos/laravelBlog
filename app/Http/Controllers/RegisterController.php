@@ -25,7 +25,6 @@ class RegisterController extends Controller
       $user->save();
 
       auth()->login($user);
-      var_dump($user);
       return redirect("/posts");
     }
 
