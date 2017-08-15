@@ -7,42 +7,46 @@ use App\Post;
 class PostsController extends Controller
 {
 
-    public function index()
-    {
-        $posts = Post::all();
+  public function __construct(){
+    $this->middleware('auth')->except('index', 'show');
+  }
 
-        return view('posts.index', ['posts' => $posts]);
-    }
+  public function index()
+  {
+      $posts = Post::all();
 
-    public function show($id)
-    {
-        $post = Post::find($id);
+      return view('posts.index', ['posts' => $posts]);
+  }
 
-        return view('posts.show', ['post' => $post]);
-    }
+  public function show($id)
+  {
+      $post = Post::find($id);
 
-    public function create()
-    {
-        return view('posts.create');
-    }
+      return view('posts.show', ['post' => $post]);
+  }
 
-    public function store()
-    {
+  public function create()
+  {
+      return view('posts.create');
+  }
 
-        $this->validate(request(), [
-            'title' => 'required',
-            'body' => 'required'
-        ]);
+  public function store()
+  {
 
-        $post = new Post;
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->published = false;
+      $this->validate(request(), [
+          'title' => 'required',
+          'body' => 'required'
+      ]);
 
-        $post->save();
+      $post = new Post;
+      $post->title = request('title');
+      $post->body = request('body');
+      $post->published = false;
+      $post->user_id = auth()->user()->id;
+      $post->save();
 
 
-        return redirect('/posts');
+      return redirect('/posts');
 
-    }
+  }
 }
