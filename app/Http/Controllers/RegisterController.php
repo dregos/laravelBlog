@@ -10,6 +10,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware('age')->only('store');
     }
 
     public function create(){
@@ -29,7 +30,10 @@ class RegisterController extends Controller
       $user->password = bcrypt(request("password"));
       $user->save();
 
+
       auth()->login($user);
+      
+      session()->flash('message', "Thank you for registration!");
       return redirect("/posts");
     }
 
