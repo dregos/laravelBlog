@@ -13,7 +13,8 @@ class PostsController extends Controller
 
   public function index()
   {
-      $posts = Post::all();
+      $posts = Post::with('user')->paginate(5);
+      \Log::info($posts);
 
       return view('posts.index', ['posts' => $posts]);
   }
