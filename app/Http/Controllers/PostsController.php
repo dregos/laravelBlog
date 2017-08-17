@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Tag;
 
 class PostsController extends Controller
 {
@@ -13,7 +14,7 @@ class PostsController extends Controller
 
   public function index()
   {
-      $posts = Post::with('user')->paginate(5);
+      $posts = Post::with('user')->latest()->paginate(5);
       \Log::info($posts);
 
       return view('posts.index', ['posts' => $posts]);
@@ -28,7 +29,8 @@ class PostsController extends Controller
 
   public function create()
   {
-      return view('posts.create');
+      $tags = Tag::all();
+      return view('posts.create', compact('tags'));
   }
 
   public function store()
@@ -46,6 +48,7 @@ class PostsController extends Controller
       $post->user_id = auth()->user()->id;
       $post->save();
 
+      $post->tags()->attach(request('tags'));
 
       return redirect('/posts');
 

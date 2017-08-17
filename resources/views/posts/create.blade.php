@@ -19,6 +19,14 @@
             <label for="body">Body</label>
             <textarea class="form-control" id="body" name="body"></textarea>
         </div>
+        <div class="form-group">
+            <label for="tags[]">Tags</label>
+            @foreach($tags as $tag)
+              <div class="checkbox">
+                <label><input type="checkbox" name="tags[]" id="tag" value="{{$tag->id}}">{{$tag->name}}</label>
+              </div>
+            @endforeach
+        </div>
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
